@@ -10,7 +10,7 @@ function mousedown(id) {
 }
 
 var tilesize = 400;
-var magsize = 400;
+var magsize = 500;
 
 function hideMagnifier() {
 	$("#magnifier").hide();
@@ -52,7 +52,7 @@ function showMagnifier(img,mousepos) {
 }
 
 function tilesAround(img,lpos,magsize) {
-	var upperLeft = {x: lpos.x - magsize / 2, y: lpos.y - magsize / 2};
+	var upperLeft = {x: Math.round(lpos.x - magsize / 2), y: Math.round(lpos.y - magsize / 2)};
 	var lowerRight = {x: lpos.x + magsize / 2, y: lpos.y + magsize / 2};
 	var lsize = largesize(img);
 	var tiles=[];
@@ -61,13 +61,12 @@ function tilesAround(img,lpos,magsize) {
 		for(var y = upperLeft.y; y - tilesize < lowerRight.y; y += tilesize) {
 			var width = Math.min(x+tilesize,lsize.width) - x;
 			var height = Math.min(y+tilesize,lsize.height) - y;
-			tiles.push( {ix: x, iy: y, ulx: x, uly: y, width: width, height: height} );
+			tiles.push( {ix: x, iy: y, ulx: x-upperLeft.x, uly: y-upperLeft.y, width: width, height: height, url: } );
 		}			
 	}
 
 	return tiles;
 }
-
 
 function basename(img) {
 	return $(img).attr('src').replace('images/.*/','');
