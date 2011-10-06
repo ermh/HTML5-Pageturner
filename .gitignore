@@ -5,4 +5,5 @@ build
 lib
 private.properties
 genfiles.properties
-/index.html
+/web/index.html
+*~
