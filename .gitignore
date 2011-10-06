@@ -3,3 +3,6 @@ images.js
 .DS_Store
 build
 lib
+private.properties
+genfiles.properties
+/index.html
