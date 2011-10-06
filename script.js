@@ -13,11 +13,11 @@ var tilesize = 400;
 var magsize = 400;
 
 function hideMagnifier() {
-	$("magnifier").css("display","none");
+	$("#magnifier").hide();
 }
 
 function pageclick(img,mousepos) {
-	hideMagnifier();
+	$("#magnifier").hide();
 	showMagnifier(img,mousepos);
 }
 
@@ -26,7 +26,7 @@ function showMagnifier(img,mousepos) {
 	var children = $(magnifier).children();
 	children.remove();
 	var pos = {left: mousepos.x - tilesize/2, top: mousepos.y - tilesize/2};
-	$(magnifier).position(pos);
+	magnifier.position(pos);
 	
 	var imgpos = $(img).offset();
 	var nsize = normalsize(img);
@@ -37,17 +37,18 @@ function showMagnifier(img,mousepos) {
 	var tiles = tilesAround(img,lpos,magsize);
 	
 	var tile;
-	for(tile in tiles) {
-		var t = $("<img></img>");
-		t.css("position","absolute");
-		t.offset({left: tile.ulx, top: tile.uly});
-		t.width(tile.width);
-		t.height(tile.height);
-		$(magnifier).add($(t));
-		
+	for(var i=0; i<tiles.length; i++) {
+        tile = tiles[i];
+  		var t = $("<img></img>");
+		t.css("position","relative");
+		t.css("left","5px");
+		t.css("top",tile.uly);
+		t.css({left: tile.ulx, top: tile.uly, width: tile.width, height: tile.height});
+		magnifier.append(t);
 	}
 	
-	$(magnifier).css("display","block");
+	magnifier.css("display","block");
+	magnifier.show();
 }
 
 function tilesAround(img,lpos,magsize) {
