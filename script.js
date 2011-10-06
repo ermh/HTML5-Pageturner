@@ -22,7 +22,7 @@ function pageclick(img,mousepos) {
 }
 
 function showMagnifier(img,mousepos) {
-	var magnifier = $("magnifier");
+	var magnifier = $("#magnifier");
 	var children = $(magnifier).children();
 	children.remove();
 	var pos = {left: mousepos.x - tilesize/2, top: mousepos.y - tilesize/2};
@@ -38,12 +38,13 @@ function showMagnifier(img,mousepos) {
 	
 	var tile;
 	for(tile in tiles) {
-		var img = $("<img style='position: absolute' />");
-		$(img).css("position","absolute");
-		$(img).offset({left: tile.ulx, top: tile.uly});
-		$(img).width(tile.width);
-		$(img).height(tile.height);
-		$(magnifier).children().append($(img));
+		var t = $("<img></img>");
+		t.css("position","absolute");
+		t.offset({left: tile.ulx, top: tile.uly});
+		t.width(tile.width);
+		t.height(tile.height);
+		$(magnifier).add($(t));
+		
 	}
 	
 	$(magnifier).css("display","block");
@@ -86,8 +87,6 @@ function normalsize(img) {
 function loaded() {
 	$('.page').click(function(event) {
 		// alert(event.pageX+" "+event.pageY+" "+event.target);
-
-		
 		showMagnifier(event.target,{x: event.pageX, y: event.pageY});
   	});
 }
