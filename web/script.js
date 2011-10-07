@@ -44,7 +44,7 @@ function hideMagnifier() {
 }
 
 function pageclick(img,mousepos) {
-	$("#magnifier").hide();
+	// $("#magnifier").hide();
 	showMagnifier(img,mousepos);
 }
 
@@ -52,7 +52,7 @@ function showMagnifier(img,mousepos) {
 	var magnifier = $("#magnifier");
 	var children = $(magnifier).children();
 	children.remove();
-	var pos = {left: mousepos.x - tilesize/2, top: mousepos.y - tilesize/2};
+	var pos = {left: mousepos.x - magsize/2, top: mousepos.y - magsize/2};
 	
         var imgpos = $(img).offset();
 	var nsize = normalsize(img);
@@ -82,8 +82,6 @@ function showMagnifier(img,mousepos) {
 	magnifier.show();
 }
 
-alert("load");
-
 function tilesAround(img,lpos,magsize) {
 	var upperLeft = {x: Math.round(lpos.x - magsize / 2), y: Math.round(lpos.y - magsize / 2)};
 	var lowerRight = {x: lpos.x + magsize / 2, y: lpos.y + magsize / 2};
@@ -103,12 +101,15 @@ function tilesAround(img,lpos,magsize) {
         	
         for(var tiy = upperLeftTile.y; tiy <= lowerRightTile.y; tiy++) {
             for(var tix = upperLeftTile.x; tix <= lowerRightTile.x; tix++) {
+                if (tix < 0 || tiy < 0) continue;
+                if (tix > lowerRightTile.x || tiy > lowerRightTile.y) continue;
+                
                 var left = tix * tilesize - upperLeft.x;
-                var top = tiy * tilesize - upperLeft.y;     
+                var top = tiy * tilesize - upperLeft.y;
+                
                 var tilename = (tix * tilesize)+","+(tiy * tilesize);
                 var width = Math.min(lsize.width - tix * tilesize,tilesize);
                 var height = Math.min(lsize.height - tiy * tilesize,tilesize);
-                alert(""+width);
                 var url = "images/tiles/"+tilename+"/"+basename(img);
  				tiles.push({left: left, top: top, url: url, width: width, height: height});
             }
@@ -132,11 +133,17 @@ function normalsize(img) {
 	return {width: 595, height: 779 };
 }
 
+function loadImages() {
+}
+
 function loaded() {
+	$('.magnifier').click(function(event) {
+		hideMagnifier();
+  	});
 	$('.page').click(function(event) {
-		// alert(event.pageX+" "+event.pageY+" "+event.target);
 		showMagnifier(event.target,{x: event.pageX, y: event.pageY});
   	});
+	hideMagnifier();
 }
 
 
