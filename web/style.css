@@ -1,19 +1,45 @@
 .page {
 	width: 595px;
-        height: 779px;
-        z-index: 0;
+    height: 779px;
+    z-index: 0;
 }
 
 .magnifier {
-        overflow: hidden;
+    overflow: hidden;
 	position: absolute;
 	border: 1px solid black;
 	background-color: white;
 	width: 400px; height: 400px;
-        z-index: 100;
+    z-index: 100;
 }
 
 .magnifier img {
     z-index: 200;
 }
 
+.leftthumb {
+    margin-left: 25px;
+    border: 1px solid black;
+}
+
+.spread {
+}
+
+.spreadoff {
+	position:absolute; 
+	left: 0px; 
+	top: 0px; 
+	right: 0px; 
+	bottom: 0px; 
+	overflow: scroll" 
+}
+
+.scrobber {
+	display: none;
+	position:absolute; 
+	left: 0px; 
+	top: 0px; 
+	right: 0px; 
+	bottom: 0px; 
+	overflow: scroll" 
+}

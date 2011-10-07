@@ -3,7 +3,7 @@
 $l2n = 72/300;
 $l2s = 15/300;
 
-($lw,$lh) = (2569,3248);
+($lw,$lh) = (2480,3248);
 ($nw,$nh) = (int($lw*$l2n),int($lh*$l2n));
 ($sw,$sh) = (int($lw*$l2s),int($lh*$l2s));
 
@@ -50,7 +50,6 @@ close(IMGLIST);
 
 
 
-if (1) {
 open(APPCACHE,">test.appcache");
 
 system("mkdir -p images/large");
@@ -70,22 +69,32 @@ script.js
 style.css
 END
 
+$gentiles = 1;
+$gensmall = 0;
+$gennormal = 0;
+
 for($i=0; $i<$#images; $i++) {
-	# Normal
+    # Normal
+    if ($gennormal) {
         $cmd = "convert -filter Quadratic -resize ${nw}x${nh} images/large/$images[$i] images/normal/$images[$i]";
 	print STDERR "generate normal size (72dpi) $cmd\n";
-	#system($cmd);
+	system($cmd);
 	print STDERR "DONE\n";
-	
 	print APPCACHE "images/normal/$images[$i]\n";
-	print APPCACHE "images/small/$images[$i]\n";
-
-        # Small
+    }
+    
+    
+    # Small
+    if ($gensmall) {
 	$cmd = "convert -filter Quadratic -resize ${sw}x${sh} images/large/$images[$i] images/small/$images[$i]";
 	print STDERR "generate small size (12dpi) $cmd\n";
-	#system($cmd);
+	system($cmd);
 	print STDERR "DONE\n";
-
+	print APPCACHE "images/small/$images[$i]\n";
+    }
+    
+    # Tiles
+    if ($gentiles) {
 	for($dx=0; $dx<$lw; $dx+=${tilesize}) {
 		for($dy=0; $dy<$lh; $dy+=${tilesize}) {
 			$dx2 = $dx+${tilesize} < $lw ? $dx+${tilesize} : $lw;
@@ -94,9 +103,8 @@ for($i=0; $i<$#images; $i++) {
 			$w = $dx2-$dx;
 			$h = $dy2-$dy;
 
-			# $cmd = "mkdir -p images/tiles/${dx},${dy}";
-			# print STDERR "$cmd\n";
-			# system($cmd);
+			$cmd = "mkdir -p images/tiles/${dx},${dy}";
+			system($cmd);
 			
 			$cmd = "convert -crop ${w}x${h}+${dx}+${dy} -quality 50 images/large/$images[$i] images/tiles/${dx},${dy}/$images[$i]";
 			print STDERR "$cmd\n";
@@ -105,24 +113,6 @@ for($i=0; $i<$#images; $i++) {
 			print APPCACHE "images/tiles/${dx},${dy}/$images[$i]\n";
 		}
 	}
+    }
 }
 close(APPCACHE);
-}
-
-
-			
-print <<END;
-<html>
-<link rel="stylesheet" type="text/css" href="style.css" />
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-<script src="script.js"></script>
-END
-print <<END;
-<body onload="loaded()">
-<div class="magnifier" id="magnifier"></div>
-END
-for($i=0; $i<$#images; $i++) {
-	print <<END;
-	<img id="img$i" src="images/normal/$images[$i]?test" class="page" />
-END
-}

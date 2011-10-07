@@ -126,14 +126,29 @@ function tile(img,x,y) {
 }
 
 function largesize(img) {
-	return {width: 2569, height: 3248 };
+	return {width: 2480, height: 3248 };
 }
 
 function normalsize(img) {
 	return {width: 595, height: 779 };
 }
 
+function smallsize(img) {
+	return {width: 124, height: 162 };
+}
+
+
 function loadImages() {
+	var scrobber = $('#scrobber');
+	scrobber.empty();
+	for(var i=0; i<images.length; i++) {
+		var basename = images[i];
+		var smallurl = "images/small/"+basename;
+		var img = $("<img></img>");
+		img.attr('src',smallurl);
+		img.attr('class', i % 2 == 0 ? 'leftthumb' : 'rightthumb');
+		scrobber.append(img);
+	}
 }
 
 function loaded() {
@@ -144,6 +159,7 @@ function loaded() {
 		showMagnifier(event.target,{x: event.pageX, y: event.pageY});
   	});
 	hideMagnifier();
+	// loadImages();
 }
 
 
