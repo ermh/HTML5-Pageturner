@@ -5,6 +5,5 @@ build
 lib
 private.properties
 genfiles.properties
-/web/index.html
 *~
 /nbproject/private/
