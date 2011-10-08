@@ -1,35 +1,17 @@
 <html mfanifest="test.appcache?101">
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-1.6.4.js"></script>
     <script src="script.js"></script>
     <body onload="loaded()">
-        <div class="magnifier" id="magnifier"></div>
         <div class="spread" id="spread">
-            <img id="img0" src="images/normal/S001CO103.jpg?test" class="page" />
-            <img id="img1" src="images/normal/S002CO103.jpg?test" class="page" />
-            <img id="img2" src="images/normal/S003CO103.jpg?test" class="page" />
-            <img id="img3" src="images/normal/S004CO103.jpg?test" class="page" />
-            <img id="img4" src="images/normal/S005CO103.jpg?test" class="page" />
-            <img id="img5" src="images/normal/S006CO103.jpg?test" class="page" />
-            <img id="img6" src="images/normal/S007CO103.jpg?test" class="page" />
-            <img id="img7" src="images/normal/S008CO103.jpg?test" class="page" />
-            <img id="img8" src="images/normal/S009CO103.jpg?test" class="page" />
-            <img id="img9" src="images/normal/S010CO103.jpg?test" class="page" />
-            <img id="img10" src="images/normal/S011CO103.jpg?test" class="page" />
-            <img id="img11" src="images/normal/S012CO103.jpg?test" class="page" />
-            <img id="img12" src="images/normal/S013CO103.jpg?test" class="page" />
-            <img id="img13" src="images/normal/S014CO103.jpg?test" class="page" />
-            <img id="img14" src="images/normal/S015CO103.jpg?test" class="page" />
-            <img id="img15" src="images/normal/S016CO103.jpg?test" class="page" />
-            <img id="img16" src="images/normal/S017CO103.jpg?test" class="page" />
-            <img id="img17" src="images/normal/S018CO103.jpg?test" class="page" />
-            <img id="img18" src="images/normal/S019CO103.jpg?test" class="page" />
-            <img id="img19" src="images/normal/S020CO103.jpg?test" class="page" />
-            <img id="img20" src="images/normal/S021CO103.jpg?test" class="page" />
-            <img id="img21" src="images/normal/S022CO103.jpg?test" class="page" />
+            <div id="img1" class="leftpage">
+                <img alt="Left" id="leftimg" class="leftimg" src="images/normal/S002CO103.jpg?test" />
+            </div>
+            <div id="img2" class="rightpage">
+                <img alt="Right" id="rightimg" class="rightimg" src="images/normal/S003CO103.jpg?test" />
+            </div>
         </div>
-        <div style="" class="scrobber" id="scrobber">
-        	hej med dig
-        </div>
+        <div style="" class="scrobber" id="scrobber"></div>
+        <div class="magnifier" id="magnifier"></div>
     </body>
 </html>

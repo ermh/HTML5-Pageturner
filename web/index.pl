@@ -43,7 +43,7 @@ print IMGLIST "var images = [\n";
 for($i=0; $i<$#images; $i++) {
 	$largeurl = "images/large/$images[$i]";
 	$normalurl = "images/normal/$images[$i]";
-	print IMGLIST "{large: {url: $largeurl, width: $lw, height: $lh}, normal: {url: $normalurl, width: $nw, height: $nh},\n";
+	print IMGLIST "{large: {url: $largeurl, width: $lw, height: $lh}, normal: {url: $normalurl, width: $nw, height: $nh}},\n";
 }
 print IMGLIST "];\n";
 close(IMGLIST);
@@ -77,42 +77,42 @@ for($i=0; $i<$#images; $i++) {
     # Normal
     if ($gennormal) {
         $cmd = "convert -filter Quadratic -resize ${nw}x${nh} images/large/$images[$i] images/normal/$images[$i]";
-	print STDERR "generate normal size (72dpi) $cmd\n";
-	system($cmd);
-	print STDERR "DONE\n";
-	print APPCACHE "images/normal/$images[$i]\n";
+        print STDERR "generate normal size (72dpi) $cmd\n";
+        system($cmd);
+        print STDERR "DONE\n";
+        print APPCACHE "images/normal/$images[$i]\n";
     }
     
     
     # Small
     if ($gensmall) {
-	$cmd = "convert -filter Quadratic -resize ${sw}x${sh} images/large/$images[$i] images/small/$images[$i]";
-	print STDERR "generate small size (12dpi) $cmd\n";
-	system($cmd);
-	print STDERR "DONE\n";
-	print APPCACHE "images/small/$images[$i]\n";
+        $cmd = "convert -filter Quadratic -resize ${sw}x${sh} images/large/$images[$i] images/small/$images[$i]";
+        print STDERR "generate small size (12dpi) $cmd\n";
+        system($cmd);
+        print STDERR "DONE\n";
+        print APPCACHE "images/small/$images[$i]\n";
     }
     
     # Tiles
     if ($gentiles) {
-	for($dx=0; $dx<$lw; $dx+=${tilesize}) {
-		for($dy=0; $dy<$lh; $dy+=${tilesize}) {
-			$dx2 = $dx+${tilesize} < $lw ? $dx+${tilesize} : $lw;
-			$dy2 = $dy+${tilesize} < $lh ? $dy+${tilesize} : $lh;
-			
-			$w = $dx2-$dx;
-			$h = $dy2-$dy;
+        for($dx=0; $dx<$lw; $dx+=${tilesize}) {
+            for($dy=0; $dy<$lh; $dy+=${tilesize}) {
+                $dx2 = $dx+${tilesize} < $lw ? $dx+${tilesize} : $lw;
+                $dy2 = $dy+${tilesize} < $lh ? $dy+${tilesize} : $lh;
 
-			$cmd = "mkdir -p images/tiles/${dx},${dy}";
-			system($cmd);
-			
-			$cmd = "convert -crop ${w}x${h}+${dx}+${dy} -quality 50 images/large/$images[$i] images/tiles/${dx},${dy}/$images[$i]";
-			print STDERR "$cmd\n";
-			system($cmd);
+                $w = $dx2-$dx;
+                $h = $dy2-$dy;
 
-			print APPCACHE "images/tiles/${dx},${dy}/$images[$i]\n";
-		}
-	}
+                $cmd = "mkdir -p images/tiles/${dx},${dy}";
+                system($cmd);
+
+                $cmd = "convert -crop ${w}x${h}+${dx}+${dy} -quality 50 images/large/$images[$i] images/tiles/${dx},${dy}/$images[$i]";
+                print STDERR "$cmd\n";
+                system($cmd);
+
+                print APPCACHE "images/tiles/${dx},${dy}/$images[$i]\n";
+            }
+        }
     }
 }
 close(APPCACHE);

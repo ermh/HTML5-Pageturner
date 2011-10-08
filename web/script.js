@@ -20,8 +20,7 @@ var images = [
     "S019CO103.jpg",
     "S020CO103.jpg",
     "S021CO103.jpg",
-    "S022CO103.jpg",
-    "S023CO103.jpg"
+    "S022CO103.jpg"
 ];
 
 
@@ -44,7 +43,6 @@ function hideMagnifier() {
 }
 
 function pageclick(img,mousepos) {
-	// $("#magnifier").hide();
 	showMagnifier(img,mousepos);
 }
 
@@ -54,8 +52,8 @@ function showMagnifier(img,mousepos) {
 	children.remove();
 	var pos = {left: mousepos.x - magsize/2, top: mousepos.y - magsize/2};
 	
-        var imgpos = $(img).offset();
-	var nsize = normalsize(img);
+    var imgpos = $(img).offset();
+	var nsize = {width: $(img).width(), height: $(img).height()};
 	var lsize = largesize(img);
 
 	var lpos = { x: (mousepos.x - imgpos.left) * lsize.width / nsize.width,
@@ -64,15 +62,15 @@ function showMagnifier(img,mousepos) {
 	
 	var tile;
 	for(var i=0; i<tiles.length; i++) {
-            tile = tiles[i];
-            var t = $("<img></img>");
-            t.css("position","absolute");
-            t.css("left",tile.left);
-            t.css("top",tile.top);
-            t.css("width", tile.width);
-            t.css("height", tile.height);
-            t.attr("src",tile.url);
-            magnifier.append(t);
+        tile = tiles[i];
+        var t = $("<img />");
+        t.css("position","absolute");
+        t.css("left",tile.left);
+        t.css("top",tile.top);
+        t.css("width", tile.width);
+        t.css("height", tile.height);
+        t.attr("src",tile.url);
+        magnifier.append(t);
 	}
 	magnifier.css("position", "absolute");
 	magnifier.css("left", pos.left);
@@ -88,37 +86,37 @@ function tilesAround(img,lpos,magsize) {
 	var lsize = largesize(img);
 	var tiles=[];
         
-        var upperLeftTile = {
-            x: Math.floor(upperLeft.x / tilesize), 
-            y: Math.floor(upperLeft.y / tilesize)
+    var upperLeftTile = {
+        x: Math.floor(upperLeft.x / tilesize), 
+        y: Math.floor(upperLeft.y / tilesize)
+    }
+    var lowerRightTile = {
+        x: Math.floor(lowerRight.x / tilesize), 
+        y: Math.floor(lowerRight.y / tilesize)
+    }
+    
+    var lsize = largesize(img);
+    	
+    for(var tiy = upperLeftTile.y; tiy <= lowerRightTile.y; tiy++) {
+        for(var tix = upperLeftTile.x; tix <= lowerRightTile.x; tix++) {
+            if (tix < 0 || tiy < 0) continue;
+            if (tix > lowerRightTile.x || tiy > lowerRightTile.y) continue;
+            
+            var left = tix * tilesize - upperLeft.x;
+            var top = tiy * tilesize - upperLeft.y;
+            
+            var tileName = (tix * tilesize)+","+(tiy * tilesize);
+            var width = Math.min(lsize.width - tix * tilesize,tilesize);
+            var height = Math.min(lsize.height - tiy * tilesize,tilesize);
+            var url = "images/tiles/"+tileName+"/"+basename($(img).attr('src'));
+			tiles.push({left: left, top: top, url: url, width: width, height: height});
         }
-        var lowerRightTile = {
-            x: Math.floor(lowerRight.x / tilesize), 
-            y: Math.floor(lowerRight.y / tilesize)
-        }
-        
-        var lsize = largesize(img);
-        	
-        for(var tiy = upperLeftTile.y; tiy <= lowerRightTile.y; tiy++) {
-            for(var tix = upperLeftTile.x; tix <= lowerRightTile.x; tix++) {
-                if (tix < 0 || tiy < 0) continue;
-                if (tix > lowerRightTile.x || tiy > lowerRightTile.y) continue;
-                
-                var left = tix * tilesize - upperLeft.x;
-                var top = tiy * tilesize - upperLeft.y;
-                
-                var tilename = (tix * tilesize)+","+(tiy * tilesize);
-                var width = Math.min(lsize.width - tix * tilesize,tilesize);
-                var height = Math.min(lsize.height - tiy * tilesize,tilesize);
-                var url = "images/tiles/"+tilename+"/"+basename(img);
- 				tiles.push({left: left, top: top, url: url, width: width, height: height});
-            }
-        }
+    }
 	return tiles;
 }
 
-function basename(img) {
-	return $(img).attr('src').replace('images/normal/','');
+function basename(url) {
+    return url.replace(/images\/[^/]+\//,"");
 }
 
 function tile(img,x,y) {
@@ -144,20 +142,46 @@ function loadImages() {
 	for(var i=0; i<images.length; i++) {
 		var basename = images[i];
 		var smallurl = "images/small/"+basename;
-		var img = $("<img></img>");
+		var img = $("<img />");
 		img.attr('src',smallurl);
 		img.attr('class', i % 2 == 0 ? 'leftthumb' : 'rightthumb');
 		scrobber.append(img);
 	}
 }
 
+function indexOfImg(img) {
+    return images.indexOf(basename(img.attr('src')));
+}
+
+function normalUrl(name) {
+    return "" != name ? "images/normal/"+name : "";
+}
+
+function nextSpread() {
+    var imgIdx = indexOfImg($('#leftimg'));
+    var nextImgIdx = imgIdx + 2;
+    var leftIdx = nextImgIdx;
+    if (leftIdx >= images.length) leftIdx = 0;
+    var rightIdx = leftIdx + 1;
+    var leftName = images[leftIdx];
+    var rightName = rightIdx < images.length ? images[rightIdx] : "";
+    $('#leftimg').attr('src', normalUrl(leftName));
+    $('#rightimg').attr('src', normalUrl(rightName));
+}
+
 function loaded() {
+	$("html").keypress(function(event){ document.title = "code: "+event.value; });
 	$('.magnifier').click(function(event) {
 		hideMagnifier();
   	});
-	$('.page').click(function(event) {
+  	$('.leftpage,.rightpage').dblclick(function(event) {
 		showMagnifier(event.target,{x: event.pageX, y: event.pageY});
   	});
+  	
+  	$('.leftpage,.rightpage').click(function(event) {
+  		nextSpread();
+	});
+  	
 	hideMagnifier();
 	// loadImages();
 }
