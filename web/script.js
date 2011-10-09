@@ -179,7 +179,8 @@ function loaded() {
   	});
   	
   	$('.leftpage,.rightpage').click(function(event) {
-  		nextSpread();
+  		// nextSpread();
+        
 	});
   	
 	hideMagnifier();
