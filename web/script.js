@@ -174,13 +174,15 @@ function loaded() {
 		showMagnifier(event.target,{x: event.pageX, y: event.pageY});
   	});
   	
-  	$('.leftpage,.rightpage').click(function(event) {
-  		// nextSpread();
-        
+  	$('.leftpage,.rightpage').dblclick(function(event) {
+  		nextSpread();
 	});
-  	
+	
+	$('.leftpage,.rightpage').swipe({
+	     swipeLeft: function() { nextSpread(); },
+	     swipeRight: function() { nextSpread(); },
+	});
 	hideMagnifier();
-	// loadImages();
 }
 
 
