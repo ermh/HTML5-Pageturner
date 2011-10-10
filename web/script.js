@@ -42,10 +42,6 @@ function hideMagnifier() {
 	$("#magnifier").hide();
 }
 
-function pageclick(img,mousepos) {
-	showMagnifier(img,mousepos);
-}
-
 function showMagnifier(img,mousepos) {
 	var magnifier = $("#magnifier");
 	var children = $(magnifier).children();
@@ -58,6 +54,7 @@ function showMagnifier(img,mousepos) {
 
 	var lpos = { x: (mousepos.x - imgpos.left) * lsize.width / nsize.width,
 				 y: (mousepos.y - imgpos.top) * lsize.height / nsize.height };
+
 	var tiles = tilesAround(img,lpos,magsize);
 	
 	var tile;
@@ -90,13 +87,12 @@ function tilesAround(img,lpos,magsize) {
         x: Math.floor(upperLeft.x / tilesize), 
         y: Math.floor(upperLeft.y / tilesize)
     }
+
     var lowerRightTile = {
         x: Math.floor(lowerRight.x / tilesize), 
         y: Math.floor(lowerRight.y / tilesize)
     }
     
-    var lsize = largesize(img);
-    	
     for(var tiy = upperLeftTile.y; tiy <= lowerRightTile.y; tiy++) {
         for(var tix = upperLeftTile.x; tix <= lowerRightTile.x; tix++) {
             if (tix < 0 || tiy < 0) continue;
@@ -174,7 +170,7 @@ function loaded() {
 	$('.magnifier').click(function(event) {
 		hideMagnifier();
   	});
-  	$('.leftpage,.rightpage').dblclick(function(event) {
+  	$('.leftpage,.rightpage').click(function(event) {
 		showMagnifier(event.target,{x: event.pageX, y: event.pageY});
   	});
   	

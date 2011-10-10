@@ -81,7 +81,7 @@ html {
 }
 
 @-webkit-keyframes spinner {
-    from { -webkit-transform: rotateY(0deg); }  to   { -webkit-transform: rotateY(180deg); }
+    from { -webkit-transform: rotateY(0deg); }  to   { -webkit-transform: rotateY(360deg); }
 }
 
 .stage {
